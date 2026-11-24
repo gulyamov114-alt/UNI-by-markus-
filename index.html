@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniAssist | AI Student Services</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">U</span>
+    <div>
+      <strong>UniAssist</strong>
+      <small>AI agents for student life</small>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span id="mode-badge" class="badge badge-demo">Demo mode</span>
+    <button id="btn-settings" class="btn btn-ghost" type="button">Connection</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- Agent list -->
+  <aside class="sidebar" aria-label="Agents">
+    <h2>Your agents</h2>
+    <ul id="agent-list" class="agent-list"></ul>
+    <p class="hint">Each agent specialises in one area. Pick one, or use a quick action.</p>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <section class="actions" aria-label="Quick actions">
+      <button class="action-card" data-action="registration" type="button">
+        <span class="ico">📝</span><strong>Course registration</strong>
+        <small>Pick courses, check conflicts and credits</small>
+      </button>
+      <button class="action-card" data-action="report" type="button">
+        <span class="ico">📄</span><strong>Write a report</strong>
+        <small>Outline, draft and reference an assignment</small>
+      </button>
+      <button class="action-card" data-action="schedule" type="button">
+        <span class="ico">🗓️</span><strong>Study plan</strong>
+        <small>Turn deadlines into a weekly schedule</small>
+      </button>
+      <button class="action-card" data-action="support" type="button">
+        <span class="ico">💬</span><strong>Ask anything</strong>
+        <small>Rules, deadlines, scholarships, housing</small>
+      </button>
+    </section>
+
+    <section class="chat" aria-label="Conversation">
+      <div class="chat-head">
+        <div>
+          <h2 id="chat-title">Student Support</h2>
+          <small id="chat-sub">General questions about university life</small>
+        </div>
+        <button id="btn-clear" class="btn btn-ghost" type="button">Clear</button>
+      </div>
+      <div id="messages" class="messages" role="log" aria-live="polite"></div>
+
+      <form id="chat-form" class="chat-form">
+        <label for="chat-input" class="sr-only">Message</label>
+        <textarea id="chat-input" rows="2" placeholder="Type your message… (Enter to send, Shift+Enter for a new line)" required></textarea>
+        <button class="btn" type="submit" id="btn-send">Send</button>
+      </form>
+    </section>
+
+    <section class="tasks" aria-label="Requests">
+      <h2>My requests</h2>
+      <ul id="task-list" class="task-list"></ul>
+    </section>
+  </main>
+</div>
+
+<!-- Registration dialog -->
+<dialog id="dlg-registration">
+  <form method="dialog" class="dlg-form" id="form-registration">
+    <h2>Course registration</h2>
+    <label>Student ID <input name="sid" required placeholder="e.g. 20261234"></label>
+    <label>Programme
+      <select name="programme">
+        <option>Computer Science (BSc)</option>
+        <option>Business Administration (BA)</option>
+        <option>Mechanical Engineering (BEng)</option>
+        <option>Psychology (BSc)</option>
+      </select>
+    </label>
+    <label>Semester
+      <select name="semester">
+        <option>Spring 2027</option><option>Autumn 2027</option>
+      </select>
+    </label>
+    <fieldset>
+      <legend>Courses I want</legend>
+      <label class="check"><input type="checkbox" name="course" value="CS201 Data Structures (6 ECTS, Mon/Wed 10:00)" checked> CS201 Data Structures · 6 ECTS</label>
+      <label class="check"><input type="checkbox" name="course" value="CS230 Databases (6 ECTS, Tue/Thu 12:00)"> CS230 Databases · 6 ECTS</label>
+      <label class="check"><input type="checkbox" name="course" value="MA210 Linear Algebra (5 ECTS, Mon/Wed 10:00)"> MA210 Linear Algebra · 5 ECTS</label>
+      <label class="check"><input type="checkbox" name="course" value="EN150 Academic Writing (3 ECTS, Fri 09:00)"> EN150 Academic Writing · 3 ECTS</label>
+      <label class="check"><input type="checkbox" name="course" value="PH101 Ethics in Technology (3 ECTS, Thu 16:00)"> PH101 Ethics in Technology · 3 ECTS</label>
+    </fieldset>
+    <label>Notes <textarea name="notes" rows="2" placeholder="Work hours, prerequisites you already hold…"></textarea></label>
+    <div class="dlg-actions">
+      <button class="btn btn-ghost" value="cancel" formnovalidate>Cancel</button>
+      <button class="btn" value="ok">Send to Registration Agent</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Report dialog -->
+<dialog id="dlg-report">
+  <form method="dialog" class="dlg-form" id="form-report">
+    <h2>Write a report</h2>
+    <label>Topic <input name="topic" required placeholder="e.g. Impact of caching on web performance"></label>
+    <label>Type
+      <select name="type">
+        <option>Lab report</option><option>Research essay</option>
+        <option>Project report</option><option>Literature review</option>
+      </select>
+    </label>
+    <label>Length
+      <select name="length">
+        <option>1–2 pages</option><option selected>3–5 pages</option><option>6–10 pages</option>
+      </select>
+    </label>
+    <label>Citation style
+      <select name="style"><option>APA 7</option><option>IEEE</option><option>Harvard</option></select>
+    </label>
+    <label>Requirements from the assignment <textarea name="req" rows="3" placeholder="Paste the brief or marking criteria"></textarea></label>
+    <div class="dlg-actions">
+      <button class="btn btn-ghost" value="cancel" formnovalidate>Cancel</button>
+      <button class="btn" value="ok">Send to Report Agent</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Settings dialog -->
+<dialog id="dlg-settings">
+  <form method="dialog" class="dlg-form" id="form-settings">
+    <h2>Connect to Markus</h2>
+    <p class="hint">Demo mode works offline with scripted replies. Live mode talks to your own Markus server
+    (<code>markus start</code>, default port 8056) through this site's proxy.</p>
+    <label>Mode
+      <select name="mode"><option value="demo">Demo (no server)</option><option value="live">Live (Markus server)</option></select>
+    </label>
+    <label>Email <input name="email" type="email" placeholder="admin@markus.local"></label>
+    <label>Password <input name="password" type="password" autocomplete="current-password"></label>
+    <p id="settings-status" class="hint" role="status"></p>
+    <div class="dlg-actions">
+      <button class="btn btn-ghost" value="cancel" formnovalidate>Close</button>
+      <button class="btn" value="ok">Save &amp; connect</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>
